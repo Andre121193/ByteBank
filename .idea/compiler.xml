@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="bytebank" />
         <module name="bytebank-jdbc" />
+        <module name="byte-bank-alura-curso_jdbc_inicio" />
       </profile>
     </annotationProcessing>
   </component>
