@@ -69,6 +69,7 @@ public class ContaDAO {
                 contas.add(new Conta(numero, cliente));
 
             }
+            conn.close();
         } catch (SQLException e){
             throw new RuntimeException();
         }
