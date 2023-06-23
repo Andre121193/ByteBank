@@ -25,8 +25,8 @@ public class ContaDAO {
         var conta = new Conta(dadosDaConta.numero(), BigDecimal.ZERO, cliente, true);
 
         // string que vai ser enviada ao banco de dados com as informaçoes do preparedStatement
-        String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email)" +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email, esta_ativa)"+
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         try{
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
