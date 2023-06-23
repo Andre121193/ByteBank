@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class ContaService {
 
-    private ConnectionFactory connection;
+    private final ConnectionFactory connection;
 
     public ContaService() {
         this.connection = new ConnectionFactory();
@@ -41,6 +41,11 @@ public class ContaService {
         if (valor.compareTo(BigDecimal.ZERO) <= 0) {
             throw new RegraDeNegocioException("Valor do deposito deve ser superior a zero!");
         }
+
+        if (!conta.getEstaAtivo()) {
+            throw new RegraDeNegocioException("Conta inativa!");
+        }
+
         BigDecimal novoValor = conta.getSaldo().add(valor);
         Connection conn = connection.retornaConexao();
         new ContaDAO(conn).alterar(conta.getNumero(), novoValor);
@@ -55,6 +60,17 @@ public class ContaService {
         Connection conn = connection.retornaConexao();
 
         new ContaDAO(conn).deletar(numeroDaConta);
+    }
+
+    public void encerrarLogico(Integer numeroDaConta){
+        var conta = buscarContaPorNumero(numeroDaConta);
+        if (conta.possuiSaldo()) {
+            throw new RegraDeNegocioException("Conta não pode ser encerrada pois ainda possui saldo!");
+        }
+
+        Connection conn = connection.retornaConexao();
+
+        new ContaDAO(conn).alterarLogico(numeroDaConta);
     }
 
     private Conta buscarContaPorNumero(Integer numero) {
@@ -78,6 +94,10 @@ public class ContaService {
 
         if (valor.compareTo(conta.getSaldo()) > 0) {
             throw new RegraDeNegocioException("Saldo insuficiente!");
+        }
+
+        if (!conta.getEstaAtivo()) {
+            throw new RegraDeNegocioException("Conta não está ativa");
         }
 
         BigDecimal novoValor = conta.getSaldo().subtract(valor);
